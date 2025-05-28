@@ -1,0 +1,9 @@
+# Default values for myConfigMaps.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+cm:
+  - key: "key1"
+    data: "value of key 1"
+  - key: "key2"
+    data: "value of key 2"
