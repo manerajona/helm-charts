@@ -2,6 +2,7 @@
 {{- $releaseVersion := .Release.Revision }}
 {{- $chartVersion := .Chart.Version }}
 {{- $foo := .Files.Get "files/foo.txt" }}
+{{- $bar := (.Files.Glob "files/bar.yml").AsConfig }}
 {{- range $cm, $content := .Values.configMaps}}
 ---
 apiVersion: v1
@@ -18,5 +19,6 @@ data:
   {{ $v.key }} : {{ $v.data }}
 {{- end }}
   foo: {{ $foo | quote}}
+{{ $bar | indent 2 }}
 ---
 {{- end }}
