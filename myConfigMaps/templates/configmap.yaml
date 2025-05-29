@@ -1,5 +1,7 @@
 {{- $releaseName := .Release.Name }}
 {{- $releaseVersion := .Release.Revision }}
+{{- $chartVersion := .Chart.Version }}
+{{- $foo := .Files.Lines "files/foo.txt" }}
 {{- range $cm, $content := .Values.configMaps}}
 ---
 apiVersion: v1
@@ -10,9 +12,11 @@ metadata:
   annotations:
     releaseName: {{ $releaseName | quote }}
     releaseVersion: {{ $releaseVersion | quote }}
+    chartVersion: {{ $chartVersion | quote }}
 data:
 {{- range $v := $content }}
   {{ $v.key }} : {{ $v.data }}
 {{- end }}
+  foo: {{ $foo | quote}}
 ---
 {{- end }}
