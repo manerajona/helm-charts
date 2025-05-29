@@ -1,9 +1,13 @@
+{{- range $cm, $content := .Values.configMaps}}
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: cm
+  name: {{ $cm }}
   namespace: default
 data:
-{{- range $cm := .Values.cm }}
-  {{ $cm.key }} : {{ $cm.data }}
+{{- range $v := $content }}
+  {{ $v.key }} : {{ $v.data }}
+{{- end }}
+---
 {{- end }}

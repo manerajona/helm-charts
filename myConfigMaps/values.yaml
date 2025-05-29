@@ -2,8 +2,14 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-cm:
-  - key: "key1"
-    data: "value of key 1"
-  - key: "key2"
-    data: "value of key 2"
+configMaps:
+  cm1:
+    - key: "key1"
+      data: "value of cm1 key 1"
+    - key: "key2"
+      data: "value of cm 1 key 2"
+  cm2:
+    - key: "key1"
+      data: "value of cm 2 key 1"
+    - key: "key2"
+      data: "value of cm 2 key 2"
