@@ -1,3 +1,5 @@
+{{- $releaseName := .Release.Name }}
+{{- $releaseVersion := .Release.Revision }}
 {{- range $cm, $content := .Values.configMaps}}
 ---
 apiVersion: v1
@@ -5,6 +7,9 @@ kind: ConfigMap
 metadata:
   name: {{ $cm }}
   namespace: default
+  annotations:
+    releaseName: {{ $releaseName | quote }}
+    releaseVersion: {{ $releaseVersion | quote }}
 data:
 {{- range $v := $content }}
   {{ $v.key }} : {{ $v.data }}
