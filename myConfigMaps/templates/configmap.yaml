@@ -3,8 +3,8 @@
 {{- $chartVersion := .Chart.Version }}
 {{- $foo := .Files.Get "files/foo.txt" }}
 {{- $bar := (.Files.Glob "files/bar.yml").AsConfig }}
+{{- $isEnabled := .Values.somethingEnabled }}
 {{- range $cm, $content := .Values.configMaps}}
----
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -20,5 +20,9 @@ data:
 {{- end }}
   foo: {{ $foo | quote}}
 {{ $bar | indent 2 }}
----
+{{- if $isEnabled }}
+  something: "enabled"
+{{- else }}
+  something: "disabled"
+{{- end }}
 {{- end }}
