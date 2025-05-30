@@ -15,3 +15,5 @@ configMaps:
       data: "value of cm 2 key 2"
 
 somethingEnabled: true
+val1: 1
+val2: 2
