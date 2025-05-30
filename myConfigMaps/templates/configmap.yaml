@@ -8,6 +8,7 @@
 {{- $v2 := .Values.val2 }}
 {{- $v3 := .Values.val3 }}
 {{- $v4 := .Values.val4 }}
+{{- $v5 := .Values.val5 }}
 {{- range $cm, $content := .Values.configMaps}}
 apiVersion: v1
 kind: ConfigMap
@@ -40,4 +41,5 @@ data:
   valuesCheck: "no match"
 {{- end }}
   myDefault: {{ default "default val" $v4 }}
+  myRequired: {{ required "val5 cannot be empty" $v5 }}
 {{- end }}
