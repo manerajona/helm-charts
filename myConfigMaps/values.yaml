@@ -17,3 +17,4 @@ configMaps:
 somethingEnabled: true
 val1: 1
 val2: 2
+val3: 4

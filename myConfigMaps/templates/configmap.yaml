@@ -6,6 +6,7 @@
 {{- $isEnabled := .Values.somethingEnabled }}
 {{- $v1 := .Values.val1 }}
 {{- $v2 := .Values.val2 }}
+{{- $v3 := .Values.val3 }}
 {{- range $cm, $content := .Values.configMaps}}
 apiVersion: v1
 kind: ConfigMap
@@ -28,6 +29,11 @@ data:
   something: "disabled"
 {{- end }}
 {{- if and $v1 $v2 }}
+  values: "match"
+{{- else }}
+  values: "no match"
+{{- end }}
+{{- if eq $v3 "3" }}
   values: "match"
 {{- else }}
   values: "no match"
