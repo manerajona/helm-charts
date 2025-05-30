@@ -38,7 +38,7 @@ data:
 {{- if eq $v3 "3" }}
   valuesCheck: "match"
 {{- else }}
-  valuesCheck: "no match"
+  {{- fail "val3 is not valid" }}
 {{- end }}
   myDefault: {{ default "default val" $v4 }}
   myRequired: {{ required "val5 cannot be empty" $v5 }}
