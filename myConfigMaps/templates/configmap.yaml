@@ -1,63 +1,26 @@
-{{- $releaseName := .Release.Name }}
-{{- $releaseVersion := .Release.Revision }}
-{{- $chartVersion := .Chart.Version }}
-{{- $foo := .Files.Get "files/foo.txt" }}
-{{- $bar := (.Files.Glob "files/bar.yml").AsConfig }}
-{{- $isEnabled := .Values.somethingEnabled }}
-{{- $v1 := .Values.val1 }}
-{{- $v2 := .Values.val2 }}
-{{- $v3 := .Values.val3 }}
-{{- $v4 := .Values.val4 }}
-{{- $v5 := .Values.val5 }}
-{{- $author := .Values.author }}
+{{- $ := . }}
+{{- $foo := include "myConfigMaps.foo" . }}
+{{- $bar := include "myConfigMaps.bar" . }}
 
-{{- range $cm, $content := .Values.configMaps}}
+{{- range $cm, $content := .Values.configMaps }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ $cm }}
   namespace: default
   annotations:
-    releaseName: {{ $releaseName | quote }}
-    releaseVersion: {{ $releaseVersion | quote }}
-    chartVersion: {{ $chartVersion | quote }}
-    authorId: {{ randNumeric 6 | squote }}
-    authorUsername: {{ $author.fullName | camelcase }}
-    authorInitials: {{ $author.fullName | initials }}
-    authorFirstname: {{ $author.fullName | substr 0 8 }}
-    authorLastname: {{ $author.fullName | substr 9 -1 }}
-    authorFavouriteDisc: {{ repeat 3 "la " | title | quote}}
-    isAuthorJonathan: {{ $author.fullName | contains "Jonathan" | squote }}
-{{- with $author.contact}}
-    authorEmail: {{ .email }}
-    authorPhone: {{ .phone }}
-{{- end }}
+{{ include "myConfigMaps.releaseAnnotations" $ | nindent 4 }}
+{{ include "myConfigMaps.chartAnnotations" $ | nindent 4 }}
+{{ include "myConfigMaps.authorAnnotations" $ | nindent 4 }}
 data:
 {{- range $v := $content }}
   {{ $v.key }} : {{ $v.data }}
 {{- end }}
-  foo: {{ $foo | quote}}
-{{ $bar | indent 2 }}
-
-{{- if $isEnabled }}
-  something: "enabled"
-{{- else }}
-  something: "disabled"
-{{- end }}
-
-{{- if and $v1 $v2 }}
-  valuesCheck: "match"
-{{- else }}
-  valuesCheck: "no match"
-{{- end }}
-
-{{- if eq $v3 "3" }}
-  valuesCheck: "match"
-{{- else }}
-  {{- fail "val3 is not valid" }}
-{{- end }}
-
-  myDefault: {{ default "default val" $v4 }}
-  myRequired: {{ required "val5 cannot be empty" $v5 | squote }}
-
+  foo: {{ $foo | quote }}
+{{ $bar | nindent 2 }}
+{{- include "myConfigMaps.isSomethingEnabled" $ | nindent 2 }}
+{{- include "myConfigMaps.doV1andV2Match" $ | nindent 2 }}
+{{- include "myConfigMaps.isV3Eq3" $ | nindent 2 }}
+{{- include "myConfigMaps.myDefaultValue" $ | nindent 2 }}
+{{- include "myConfigMaps.myRequiredValue" $ | nindent 2 }}
 {{- end }}
