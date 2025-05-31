@@ -9,7 +9,8 @@
 {{- $v3 := .Values.val3 }}
 {{- $v4 := .Values.val4 }}
 {{- $v5 := .Values.val5 }}
-{{- $author := .Values.author.fullName }}
+{{- $author := .Values.author }}
+
 {{- range $cm, $content := .Values.configMaps}}
 apiVersion: v1
 kind: ConfigMap
@@ -21,33 +22,42 @@ metadata:
     releaseVersion: {{ $releaseVersion | quote }}
     chartVersion: {{ $chartVersion | quote }}
     authorId: {{ randNumeric 6 | squote }}
-    authorUsername: {{ $author | camelcase }}
-    authorInitials: {{ $author | initials }}
-    authorFirstname: {{ $author | substr 0 8 }}
-    authorLastname: {{ $author | substr 9 -1 }}
+    authorUsername: {{ $author.fullName | camelcase }}
+    authorInitials: {{ $author.fullName | initials }}
+    authorFirstname: {{ $author.fullName | substr 0 8 }}
+    authorLastname: {{ $author.fullName | substr 9 -1 }}
     authorFavouriteDisc: {{ repeat 3 "la " | title | quote}}
-    isAuthorJonathan: {{ $author | contains "Jonathan" | squote }}
+    isAuthorJonathan: {{ $author.fullName | contains "Jonathan" | squote }}
+{{- with $author.contact}}
+    authorEmail: {{ .email }}
+    authorPhone: {{ .phone }}
+{{- end }}
 data:
 {{- range $v := $content }}
   {{ $v.key }} : {{ $v.data }}
 {{- end }}
   foo: {{ $foo | quote}}
 {{ $bar | indent 2 }}
+
 {{- if $isEnabled }}
   something: "enabled"
 {{- else }}
   something: "disabled"
 {{- end }}
+
 {{- if and $v1 $v2 }}
   valuesCheck: "match"
 {{- else }}
   valuesCheck: "no match"
 {{- end }}
+
 {{- if eq $v3 "3" }}
   valuesCheck: "match"
 {{- else }}
   {{- fail "val3 is not valid" }}
 {{- end }}
+
   myDefault: {{ default "default val" $v4 }}
   myRequired: {{ required "val5 cannot be empty" $v5 | squote }}
+
 {{- end }}

@@ -22,3 +22,6 @@ val5: 5
 
 author:
   fullName: "Jonathan Manera"
+  contact:
+    email: "jmanera@example.com"
+    phone: "+1 456 345234"
