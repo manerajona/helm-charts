@@ -17,4 +17,8 @@ configMaps:
 somethingEnabled: true
 val1: 1
 val2: 2
-val3: 4
+val3: 3
+val5: 5
+
+author:
+  fullName: "Jonathan Manera"

@@ -9,6 +9,7 @@
 {{- $v3 := .Values.val3 }}
 {{- $v4 := .Values.val4 }}
 {{- $v5 := .Values.val5 }}
+{{- $author := .Values.author.fullName }}
 {{- range $cm, $content := .Values.configMaps}}
 apiVersion: v1
 kind: ConfigMap
@@ -19,6 +20,13 @@ metadata:
     releaseName: {{ $releaseName | quote }}
     releaseVersion: {{ $releaseVersion | quote }}
     chartVersion: {{ $chartVersion | quote }}
+    authorId: {{ randNumeric 6 | squote }}
+    authorUsername: {{ $author | camelcase }}
+    authorInitials: {{ $author | initials }}
+    authorFirstname: {{ $author | substr 0 8 }}
+    authorLastname: {{ $author | substr 9 -1 }}
+    authorFavouriteDisc: {{ repeat 3 "la " | title | quote}}
+    isAuthorJonathan: {{ $author | contains "Jonathan" | squote }}
 data:
 {{- range $v := $content }}
   {{ $v.key }} : {{ $v.data }}
@@ -41,5 +49,5 @@ data:
   {{- fail "val3 is not valid" }}
 {{- end }}
   myDefault: {{ default "default val" $v4 }}
-  myRequired: {{ required "val5 cannot be empty" $v5 }}
+  myRequired: {{ required "val5 cannot be empty" $v5 | squote }}
 {{- end }}
