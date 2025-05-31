@@ -1,7 +1,7 @@
 {{- $ := . }}
 {{- $foo := include "myConfigMaps.foo" . }}
 {{- $bar := include "myConfigMaps.bar" . }}
-
+{{- $forceReload := include (print $.Template.BasePath "/_helpers.tpl") . | sha256sum }}
 {{- range $cm, $content := .Values.configMaps }}
 apiVersion: v1
 kind: ConfigMap
@@ -9,6 +9,7 @@ metadata:
   name: {{ $cm }}
   namespace: default
   annotations:
+    checksum/configmap: {{ $forceReload }}
 {{ include "myConfigMaps.releaseAnnotations" $ | nindent 4 }}
 {{ include "myConfigMaps.chartAnnotations" $ | nindent 4 }}
 {{ include "myConfigMaps.authorAnnotations" $ | nindent 4 }}
