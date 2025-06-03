@@ -1,0 +1,24 @@
+### Create person
+POST {{url_base}}/api/v1/people
+Content-Type: application/json
+
+{
+  "name": "Estefania",
+  "city": "Antibes",
+  "age": 31
+}
+
+### Find People
+GET {{url_base}}/api/v1/people
+
+### Find person
+GET {{url_base}}/api/v1/people/Estefania
+
+### Delete all people
+DELETE {{url_base}}/api/v1/people
+
+### healt check
+GET {{url_base}}/api/health
+
+### delay check
+GET {{url_base}}/api/delay
