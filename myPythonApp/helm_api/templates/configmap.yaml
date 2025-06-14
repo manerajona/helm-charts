@@ -1,0 +1,9 @@
+{{- if include "api.config.yaml" . }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "api.fullname" . }}-config
+data:
+  config.yaml: |
+{{ include "api.config.yaml" . | indent 4 }}
+{{- end }}

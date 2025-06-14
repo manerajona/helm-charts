@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "redis.fullname" . }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "redis.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "redis.name" . }}
+    spec:
+      containers:
+        - name: redis
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          args: {{ toJson .Values.command }}
+          env:
+            - name: REDIS_PASSWORD
+              value: "{{ .Values.password }}"
+            - name: REDIS_REPLICATION_MODE
+              value: "{{ .Values.replicationMode }}"
+          ports:
+            - containerPort: {{ .Values.service.port }}

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "api.fullname" . }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "api.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "api.name" . }}
+    spec:
+      containers:
+        - name: app
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.service.targetPort }}
+          {{- if .Values.env.redis }}
+          env:
+            - name: REDIS_HOST
+              value: {{ .Values.env.redis.host | quote }}
+            - name: REDIS_PORT
+              value: {{ .Values.env.redis.port | quote }}
+            - name: REDIS_PASSWORD
+              value: {{ .Values.env.redis.password | quote }}
+          {{- end }}
+          {{- if .Values.configfile }}
+          volumeMounts:
+            - name: config
+              mountPath: {{ .Values.configfile.mountPath }}
+              subPath: config.yaml
+          {{- end }}
+      {{- if .Values.configfile }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "api.fullname" . }}-config
+      {{- end }}

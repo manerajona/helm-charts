@@ -16,6 +16,6 @@ WORKDIR /usr/src/app
 
 CMD python ./main.py
 
-# docker build -t manerajona/simple-api:v1 .
+# docker build -t manerajona/sampleapi:v1 .
 # docker login -u manerajona
 # docker push

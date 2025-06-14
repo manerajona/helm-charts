@@ -1,0 +1,4 @@
+{{ include "redis.name" . }}:
+  image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+  password: {{ .Values.password }}
+  dns: {{ include "redis.name" . }}.{{ .Release.Namespace }}.svc.cluster.local

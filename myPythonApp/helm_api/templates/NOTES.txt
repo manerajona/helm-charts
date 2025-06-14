@@ -1,0 +1,4 @@
+{{ include "api.name" . }}:
+  image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+  dns: {{ .Values.ingress.host }}
+NOTE: Update Your Hosts File $ echo "127.0.0.1 kube.local" | sudo tee -a /etc/hosts

@@ -1,0 +1,21 @@
+image:
+  repository: manerajona/sampleapi
+  tag: v1
+service:
+  type: ClusterIP
+  port: 8080
+  targetPort: 8000
+configfile:
+  mountPath: /usr/src/app/config.yaml
+  localFile: config.yaml
+redis:
+  host: "redis"
+  password: "mypassword"
+env: {}
+ingress:
+  host: kube.local
+  annotations: {
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  }
+  tls: false
+  tlsSecret: ""    # Specify if using TLS
