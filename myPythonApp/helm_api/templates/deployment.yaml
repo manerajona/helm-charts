@@ -35,6 +35,6 @@ spec:
       {{- if .Values.configfile }}
       volumes:
         - name: config
-          configMap:
-            name: {{ include "api.fullname" . }}-config
+          secret:
+            secretName: {{ include "api.fullname" . }}-config
       {{- end }}
