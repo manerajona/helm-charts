@@ -23,3 +23,10 @@ spec:
               value: "{{ .Values.replicationMode }}"
           ports:
             - containerPort: {{ .Values.service.port }}
+          volumeMounts:
+            - name: redis-data
+              mountPath: /data
+      volumes:
+        - name: redis-data
+          persistentVolumeClaim:
+            claimName: {{ include "redis.fullname" . }}

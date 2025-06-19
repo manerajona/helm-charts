@@ -12,3 +12,6 @@ command:
   - "100"
   - "--requirepass"
   - "mypassword"
+persistentVolume:
+  accessMode: ReadWriteOnce
+  size: 1Gi
