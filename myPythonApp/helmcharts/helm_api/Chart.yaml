@@ -4,3 +4,8 @@ description: Helm chart for sample api
 type: application
 version: 0.1.0
 appVersion: "1.0"
+dependencies:
+  - name: helm_redis
+    version: 0.1.0
+    repository: file://../helm_redis/
+    condition: redis.enabled

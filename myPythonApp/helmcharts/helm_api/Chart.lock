@@ -1,0 +1,6 @@
+dependencies:
+- name: helm_redis
+  repository: file://../helm_redis/
+  version: 0.1.0
+digest: sha256:fbdca50733a24462b4f8d39e89fc8af5ec7886a92eaf65afa9c066b3aa074ccb
+generated: "2025-06-21T19:30:34.330143+02:00"

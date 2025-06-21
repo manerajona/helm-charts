@@ -9,6 +9,7 @@ configfile:
   mountPath: /usr/src/app/config.yaml
   localFile: config.yaml
 redis:
+  enabled: true
   host: "redis"
   password: "mypassword"
 env: {}
