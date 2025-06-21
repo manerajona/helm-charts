@@ -1,0 +1,13 @@
+
+redis_port: ""
+redis_password: "mypassword"
+redis_image: "redis:5.0.4"
+redis_PersistentVolumeClaim:
+  enabled: true
+  name: redis
+  size: "1Gi"
+redis_PersistentVolumeClaim_Bkp:
+  enabled: true
+  name: redis-bkp
+  size: "1Gi"
+

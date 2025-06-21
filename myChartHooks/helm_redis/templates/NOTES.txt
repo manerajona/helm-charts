@@ -1,0 +1,4 @@
+Redis :
+  Port : {{ include "redis_bkp.port" . }}
+  Password : {{ .Values.redis_password }}
+  Internal DNS : redis-{{ .Release.Name }}.{{ .Release.Namespace }}.svc.cluster.local

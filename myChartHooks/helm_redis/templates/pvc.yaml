@@ -1,0 +1,14 @@
+{{- with .Values.redis_PersistentVolumeClaim }}
+{{- if eq .enabled true }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ .name }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .size }}
+{{- end }}
+{{- end }}

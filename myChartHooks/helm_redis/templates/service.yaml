@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+{{ include "redis_bkp.metadata" . | indent 2}}
+spec:
+  ports:
+    - port: {{ include "redis_bkp.port" . }}
+  selector:
+    app: redis-{{ .Release.Name }}
+  clusterIP: None

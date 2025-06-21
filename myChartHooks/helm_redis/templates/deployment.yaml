@@ -1,0 +1,51 @@
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+{{ include "redis_bkp.metadata" . | indent 2}}
+spec:
+  selector:
+    matchLabels:
+      app: redis-{{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: redis-{{ .Release.Name }}
+    spec:
+      containers:
+      - name: redis-{{ .Release.Name }}
+        image: {{ .Values.redis_image }}
+        command:
+          - redis-server
+          - "/redis-master/redis.conf"
+          - "--requirepass {{ .Values.redis_password }}"
+          - "--appendonly yes"
+        env:
+        - name: MASTER
+          value: "true"
+        - name: REDIS_PASSWORD
+          value: {{ .Values.redis_password }}
+        ports:
+        - containerPort: {{ include "redis_bkp.port" . }}
+        resources:
+          limits:
+            cpu: "0.1"
+        volumeMounts:
+        - mountPath: /data
+          name: data
+        - mountPath: /redis-master
+          name: redis-config-{{ .Release.Name }}
+      volumes:
+        {{- if eq .Values.redis_PersistentVolumeClaim.enabled true }}        
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ .Values.redis_PersistentVolumeClaim.name }}        
+        {{- else }}
+        - name: data
+          emptyDir: {}
+        {{- end }}
+        - name: redis-config-{{ .Release.Name }}
+          configMap:
+            name: redis-{{ .Release.Name }}
+            items:
+            - key: redis-config
+              path: redis.conf

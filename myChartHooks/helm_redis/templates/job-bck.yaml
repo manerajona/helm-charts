@@ -1,0 +1,35 @@
+{{ $releaseName := .Release.Name }}
+{{ $releaseNamespace := .Release.Namespace }}
+{{ $releaseRevision := .Release.Revision }}
+{{ $redisPassword := .Values.redis_password }}
+{{- with .Values.redis_PersistentVolumeClaim_Bkp }}
+{{- if eq .enabled true }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .name }}
+  annotations:
+    # The job is cleaned up after succeeding or before a new one is created.
+    "helm.sh/hook": pre-upgrade
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: {{ .name }}
+        image: redis:alpine3.11
+        command: ["/bin/sh", "-c"]
+        args:
+        # Runs before every release upgrade, connecting to Redis and dumping the database into /backup/redis-backup.rdb (which is on the backup PVC).
+        - "redis-cli -h redis-{{ $releaseName }}.{{ $releaseNamespace }}.svc.cluster.local -a {{ $redisPassword }} --rdb bkp.rdb save && ls -la && cp bkp.rdb /backup/dump-{{ $releaseRevision }}.rdb"
+        volumeMounts:
+        - name: redis-bkp
+          mountPath: /backup
+      volumes:
+      - name: redis-bkp
+        persistentVolumeClaim:
+          claimName: {{ .name }}
+{{- end }}
+{{- end }}

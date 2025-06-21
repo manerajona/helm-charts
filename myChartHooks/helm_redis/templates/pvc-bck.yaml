@@ -1,0 +1,18 @@
+{{- with .Values.redis_PersistentVolumeClaim_Bkp }}
+{{- if eq .enabled true }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ .name }}
+  annotations:
+    # Created with a pre-upgrade hook and weight 0, ensuring it’s available before the backup job.
+    "helm.sh/hook": pre-upgrade,pre-rollback
+    "helm.sh/hook-weight": "0"
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .size }}
+{{- end }}
+{{- end }}
