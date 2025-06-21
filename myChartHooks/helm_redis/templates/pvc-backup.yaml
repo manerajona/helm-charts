@@ -5,12 +5,12 @@ apiVersion: v1
 metadata:
   name: {{ .name }}
   annotations:
-    # Created with a pre-upgrade hook and weight 0, ensuring it’s available before the backup job.
+    # pre hooks and weight 0, ensuring it is available before the backup/restore jobs.
     "helm.sh/hook": pre-upgrade,pre-rollback
     "helm.sh/hook-weight": "0"
 spec:
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
       storage: {{ .size }}

@@ -1,0 +1,47 @@
+{{- $releaseRevision := .Release.Revision }}
+{{- $redisDataPVC := .Values.redis_PersistentVolumeClaim.name }}
+{{- with .Values.redis_PersistentVolumeClaim_Bkp }}
+{{- if eq .enabled true }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .name }}-restore
+  annotations:
+    "helm.sh/hook": pre-rollback
+    "helm.sh/hook-weight": "2"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: {{ .name }}-restore
+        image: busybox
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            echo "Searching for backups...";
+            if [ -f /backup/dump-{{ $releaseRevision }}.rdb ]; then
+              echo "Restoring {{ $releaseRevision }} backup";
+              cp /backup/dump-{{ $releaseRevision }}.rdb /data/dump.rdb;
+              echo "Restore successful";
+            else
+              echo "CRITICAL: No backup file found";
+              echo "Available files:";
+              ls -la /backup/;
+              exit 1;
+            fi
+        volumeMounts:
+          - name: data
+            mountPath: /data
+          - name: backup
+            mountPath: /backup
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ $redisDataPVC }}
+        - name: backup
+          persistentVolumeClaim:
+            claimName: {{ .name }}
+{{- end }}
+{{- end }}
