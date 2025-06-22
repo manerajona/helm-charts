@@ -1,0 +1,5 @@
+global:
+  myKey: "my-value"
+
+my-sub-chart:
+  password: "parent-password"

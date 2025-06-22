@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Release.Name }}-parent
+  name: {{ .Release.Name }}-child
 data:
   key: "{{ .Values.global.myKey }}" # my-value or override-value
-  password: "{{ .Values.password }}" # library-password
+  password: "{{ .Values.password }}" # parent-password
