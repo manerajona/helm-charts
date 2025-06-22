@@ -1,0 +1,22 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: redis
+  namespace: default
+spec:
+  releaseName: redis
+  helmVersion: v3
+  chart:
+    #git: https://github.com/priximmo/helmcharts.git
+    git: git@github.com:priximmo/helmcharts.git
+    ref: master
+    path: charts/xavki_redis
+  values:
+    redis_port: ""
+    redis_password: "mypassword"
+    redis_image: "redis:5.0.4"
+    redis_PersistentVolumeClaim:
+      enabled: false
+    redis_PersistentVolumeClaim_Bck:
+      enabled: false
+

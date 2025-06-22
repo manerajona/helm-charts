@@ -1,0 +1,14 @@
+helm:
+  versions: v3
+replicaCount: 1
+#createCRD: false
+image:
+  repository: fluxcd/helm-operator
+  tag: 1.4.4
+pullPolicy: IfNotPresent
+git:
+  ssh:
+    secretName: "helm-ssh"
+    # GitHub fingerprint
+    known_hosts: "github.com ssh-rsa ..."
+statusUpdateInterval: 60s
